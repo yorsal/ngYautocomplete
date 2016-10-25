@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>ngyautocomplete</title>
+	<link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet" />
+	<script src="angular.js"></script>
+	<script src="directive/yautocomplete.js"></script>
+</head>
+<body>
+<style>
+	.box { width: 640px; margin: 80px auto; }
+	.demo { }
+	.demo a { background:#eee; border-bottom:1px solid #ccc; padding: 10px; display: block; cursor: pointer; }
+	.demo a.selected  { background:#ddd; color:#000;  }
+</style>
+
+<h2>TEXT with Array</h2>
+<div class="box">
+	<yautocomplete ng-source="[{name: '111'}, {name: '2222'}, {name: '2344'}]"></yautocomplete>
+</div>
+
+<h2>TEXT with AJAX</h2>
+<div class="box">
+	<yautocomplete ng-bounce="500" ng-source-url="data.php"></yautocomplete>
+</div>
+	<script type="text/javascript">
+	
+	var app = angular.module('app', ['ngYautocomplete']);
+  
+	</script>
+</body>
+</html>
