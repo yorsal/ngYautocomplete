@@ -2,7 +2,7 @@
  * yautocomplete
  * 
  *
- * Copyright (c) 2014 Alex Kaul
+ * Copyright (c) 2016 leyang yorsal@gmail.com 80250726@qq.com
  * License: MIT
  *
  * 
