@@ -12,20 +12,28 @@
 
 var yautocomplete = angular.module('ngYautocomplete', []);
 
-yautocomplete.controller('ngYautocompleteCtrl', ['$scope', '$http', function($scope, $http){
-  this.xxx = 1;
-}]);
-
-yautocomplete.directive('yautocomplete', function() {
+yautocomplete.directive('yautocomplete', ['$http', function($http) {
   return {
     restrict: 'E',
     scope: {
       
     },
-    controller: function($scope, $http)
-    {
+    template: '<input type="text" class="form-control" ng-model="name" value="" name="" ng-keyup="keyupHandler()" />\
+              <div class="demo"><a href="javascript:;" ng-click="clickHandler($event)" ng-repeat="item in items">{{item.name}}</a></div>\
+              '
+    ,
+  
+    link: function(scope, element, attrs, yautocompleteCtrl) {
 
-      this.getSourceUrlByXhr = function(url, val, callback) {
+        scope.items = [];
+
+        var timer,
+          inputObj = element.find('input'),
+           ngSource = attrs.ngSource || '',
+           ngSourceUrl = attrs.ngSourceUrl || '',
+           ngBounce = attrs.ngBounce || 0;
+
+      function getSourceUrlByXhr(url, val, callback) {
           $http({
             url: url,
             method: 'get',
@@ -38,40 +46,29 @@ yautocomplete.directive('yautocomplete', function() {
             
       };
       
-    },
-    template: '<input type="text" class="form-control" ng-model="name" value="" name="" ng-keyup="keyupHandler()" />\
-              <div class="demo"><a href="javascript:;" ng-click="clickHandler($event)" ng-repeat="item in items">{{item.name}}</a></div>\
-              '
-    ,
-    require: 'yautocomplete',
-    link: function(scope, element, attrs, yautocompleteCtrl) {
-        
-        scope.items = [];
-
-        var timer,
-          inputObj = element.find('input'),
-           ngSource = attrs.ngSource || '',
-           ngSourceUrl = attrs.ngSourceUrl || '',
-           ngBounce = attrs.ngBounce || 0;
-
-          
-      
       function renderSource(inputValue)
       {
-        var data = (new Function("return " + ngSource))(),
+
+        var data = angular.fromJson(ngSource),
           renderData = [];
-          for (var i = 0; i < data.length; i++) {
-              var dataValue = data[i].name + '';
+          
+          if (angular.isArray(data))
+          {
+            angular.forEach(data, function(value, key) {
 
-              if (dataValue.indexOf(inputValue) != -1) //find the word
-              {
+                var dataValue = value.name + '';
+
+                if (dataValue.indexOf(inputValue) != -1) //find the word
+                {
+                    
+                    renderData.push({ name: dataValue }); 
                   
-                  renderData.push({ name: dataValue }); 
-                
-              }
+                }
+            });
+            
 
-        
           }
+          
 
           
           if (renderData.length == 0)
@@ -88,7 +85,7 @@ yautocomplete.directive('yautocomplete', function() {
       function renderSourceByXhr(inputValue)
       {
        
-        yautocompleteCtrl.getSourceUrlByXhr(ngSourceUrl, inputValue, function(data){
+        getSourceUrlByXhr(ngSourceUrl, inputValue, function(data){
 
           
           if (data.length == 0)
@@ -148,6 +145,6 @@ yautocomplete.directive('yautocomplete', function() {
     }
   };
 
-});
+}]);
 
 }());
