@@ -17,7 +17,10 @@ yautocomplete.directive('yautocomplete', ['$http', function($http) {
   return {
     restrict: 'E',
     scope: {
-      
+      'ngSource': '@ngSource',
+      'ngSourceUrl': '@ngSourceUrl',
+      'ngBounce': '@ngBounce'
+
     },
     template: '<input type="text" class="form-control" ng-model="iputValue" name="" ng-keyup="keyupHandler($event)" />\
               <div class="demo"><a href="javascript:;" ng-mouseover="hoverHandler($index)" ng-class="{selected: $index == currentIndex}" ng-click="clickHandler(item)" ng-repeat="item in items">{{item.name}}</a></div>\
@@ -25,13 +28,15 @@ yautocomplete.directive('yautocomplete', ['$http', function($http) {
     ,
   
     link: function($scope, element, attrs, yautocompleteCtrl) {
+
+       
         $scope.currentIndex = -1;
         $scope.items = [];
 
         var timer,
-           ngSource = attrs.ngSource || '',
-           ngSourceUrl = attrs.ngSourceUrl || '',
-           ngBounce = attrs.ngBounce || 0;
+           ngSource = $scope.ngSource || '',
+           ngSourceUrl = $scope.ngSourceUrl || '',
+           ngBounce = $scope.ngBounce || 0;
 
 
       function getSourceUrlByXhr(url, val, callback) {
